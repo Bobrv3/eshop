@@ -1,0 +1,36 @@
+spring:
+  config:
+    activate:
+      on-profile:
+        - dev
+  jpa:
+    hibernate:
+      ddl-auto: 'create-drop'
+    show-sql: true
+
+  datasource:
+    generate-unique-name: false
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+  thymeleaf:
+    cache: false
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - prod
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  datasource:
+    url: jdbc:mysql://localhost/eshop?serverTimezone=UTC
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
