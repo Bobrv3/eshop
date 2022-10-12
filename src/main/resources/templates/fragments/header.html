@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>NavMenu</title>
+</head>
+<body>
+<table id="nav-menu" width="100%">
+    <tr align="center">
+        <td>
+        <td width="50px"><a th:href="@{/}">Home</a></td>
+        <td width="60px"><a th:href="@{#}">Catalog</a></td>
+        <td width="60px"><a th:href="@{#}">Contacts</a></td>
+        <td width="65px"><a th:href="@{#}">About us</a></td>
+        </td>
+
+        <div sec:authorize="!isAuthenticated()">
+            <td align="right">
+            <td width="50px"><a th:href="@{/login}">Log in</a></td>
+            <td width="70px"><a th:href="@{/registrate}">Sign Up</a></td>
+            </td>
+        </div>
+
+        <div sec:authorize="isAuthenticated()">
+            <td align="right">
+            <td width="50px"><a href="#" sec:authentication="principal.username">Name</a></td>
+            <td width="70px"><a th:href="@{/logout}">Log out</a></td>
+            </td>
+        </div>
+
+    </tr>
+</table>
+</body>
+</html>

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -8,6 +8,9 @@
     <title>Main Page</title>
 </head>
 <body>
-Hello!!
+<header>
+    <div th:insert="~{fragments/header :: #nav-menu}"></div>
+</header>
+<h1>Main page</h1>
 </body>
 </html>
