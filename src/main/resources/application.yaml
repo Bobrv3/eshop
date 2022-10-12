@@ -18,6 +18,8 @@ spring:
   thymeleaf:
     cache: false
 
+rememberMeKey: ${REMEMBER_ME_KEY}
+
 ---
 spring:
   config:
@@ -34,3 +36,5 @@ spring:
     url: jdbc:mysql://localhost/eshop?serverTimezone=UTC
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+
+rememberMeKey: ${REMEMBER_ME_KEY}
