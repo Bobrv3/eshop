@@ -15,6 +15,12 @@
         <td width="60px"><a th:href="@{#}">Catalog</a></td>
         <td width="60px"><a th:href="@{#}">Contacts</a></td>
         <td width="65px"><a th:href="@{#}">About us</a></td>
+        <td width="60px" sec:authorize="hasRole('ROLE_ADMIN')">
+            <a th:href="@{/users}">Users</a>
+        </td>
+        <td width="60px" sec:authorize="isAuthenticated()">
+            <a th:href="@{/bucket}">Bucket</a>
+        </td>
         </td>
 
         <div sec:authorize="!isAuthenticated()">

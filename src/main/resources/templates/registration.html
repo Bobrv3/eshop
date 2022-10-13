@@ -8,6 +8,8 @@
     <title>Registrate</title>
 </head>
 <body>
+<div th:insert="~{fragments/header :: #nav-menu}"></div>
+
 <form th:action="@{/registrate}" th:object="${user}" method="post">
     <table>
         <tr>

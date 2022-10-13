@@ -1,5 +1,7 @@
 package com.bobrov.eshop.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,6 +21,8 @@ import java.util.Collection;
 @Data
 @Entity
 @Table(name = "users")
+@AllArgsConstructor
+@Builder
 public class User implements UserDetails {
     public enum Role {
         ROLE_ADMIN, ROLE_USER

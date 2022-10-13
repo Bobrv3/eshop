@@ -30,9 +30,10 @@ public class SecurityConfig {
     }
 
     @Bean
+    @Profile("dev")
     public PersistentTokenRepository tokenRepository() {
         JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
-        jdbcTokenRepository.setCreateTableOnStartup(false);
+        jdbcTokenRepository.setCreateTableOnStartup(true);
         jdbcTokenRepository.setDataSource(dataSource);
         return jdbcTokenRepository;
     }
@@ -66,6 +67,15 @@ public class SecurityConfig {
                 .build();
     }
 
+    @Bean
+    @Profile("prod")
+    public PersistentTokenRepository tokenRepositoryP() {
+        JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
+        jdbcTokenRepository.setCreateTableOnStartup(false);
+        jdbcTokenRepository.setDataSource(dataSource);
+        return jdbcTokenRepository;
+    }
+
     @Profile("prod")
     @Bean
     public SecurityFilterChain filterChainP(HttpSecurity httpSecurity) throws Exception {
@@ -78,7 +88,7 @@ public class SecurityConfig {
 
                 .and().rememberMe()
                 .key(rememberMeKey)
-                .tokenRepository(tokenRepository())
+                .tokenRepository(tokenRepositoryP())
 
                 .and().logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
