@@ -32,7 +32,7 @@
 
         <div sec:authorize="isAuthenticated()">
             <td align="right">
-            <td width="50px"><a href="#" sec:authentication="principal.username">Name</a></td>
+            <td width="50px"><a th:href="@{/personalAcc}" sec:authentication="principal.username">Name</a></td>
             <td width="70px"><a th:href="@{/logout}">Log out</a></td>
             </td>
         </div>
