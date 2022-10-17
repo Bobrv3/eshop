@@ -1,2 +1,0 @@
-insert into users (email, enabled, locked, password, phone, role, username)
-values ('anton.bobrov.98@gmail.com', true, false, '$2a$12$NW3FCTSgwW435PTAhnJw/euwUrRvp5q.k88TJuGwNmUfyD3xmyyse', '+375447931700', 'ROLE_ADMIN', 'Anton')
