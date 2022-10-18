@@ -1,5 +1,6 @@
 package com.bobrov.eshop.controller;
 
+import com.bobrov.eshop.dto.ProductJoinOrderDto;
 import com.bobrov.eshop.model.OrderDetail;
 import com.bobrov.eshop.model.OrderDetailId;
 import com.bobrov.eshop.service.OrderDetailService;
@@ -26,6 +27,11 @@ public class OrderDetailsController {
     @GetMapping
     public List<OrderDetail> getAll() {
         return detailService.findAll();
+    }
+
+    @GetMapping("/products/sorted_by/order")
+    public List<ProductJoinOrderDto> findProductsSortedFromMoreOrdersToLess() {
+        return detailService.findProductsSortedFromMoreOrdersToLess();
     }
 
     @GetMapping("/{id}")

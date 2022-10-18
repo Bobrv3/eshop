@@ -1,6 +1,7 @@
 package com.bobrov.eshop.service.impl;
 
 import com.bobrov.eshop.dao.OrderDetailRepository;
+import com.bobrov.eshop.dto.ProductJoinOrderDto;
 import com.bobrov.eshop.exception.NotFoundException;
 import com.bobrov.eshop.model.OrderDetail;
 import com.bobrov.eshop.model.OrderDetailId;
@@ -34,5 +35,10 @@ public class OrderDetailImpl implements OrderDetailService {
     @Override
     public void deleteById(OrderDetailId id) {
         detailRepository.deleteById(id);
+    }
+
+    @Override
+    public List<ProductJoinOrderDto> findProductsSortedFromMoreOrdersToLess() {
+        return detailRepository.findProductsSortedFromMoreOrdersToLess();
     }
 }

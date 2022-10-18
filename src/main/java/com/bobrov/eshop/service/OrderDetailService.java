@@ -1,5 +1,6 @@
 package com.bobrov.eshop.service;
 
+import com.bobrov.eshop.dto.ProductJoinOrderDto;
 import com.bobrov.eshop.model.OrderDetail;
 import com.bobrov.eshop.model.OrderDetailId;
 
@@ -13,4 +14,6 @@ public interface OrderDetailService {
     List<OrderDetail> findAll();
 
     void deleteById(OrderDetailId id);
+
+    List<ProductJoinOrderDto> findProductsSortedFromMoreOrdersToLess();
 }
