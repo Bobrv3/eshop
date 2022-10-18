@@ -1,6 +1,6 @@
 package com.bobrov.eshop.controller;
 
-import com.bobrov.eshop.model.Order;
+import com.bobrov.eshop.dto.OrderDto;
 import com.bobrov.eshop.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,13 +20,13 @@ public class OrderController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Order getOrder(@PathVariable Long id) {
+    public OrderDto getOrder(@PathVariable Long id) {
         return orderService.findById(id);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Order> getOrder() {
+    public List<OrderDto> getOrder() {
         return orderService.findAll();
     }
 }

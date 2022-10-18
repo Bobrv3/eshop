@@ -43,6 +43,11 @@ public class OrderDetail {
 
     private int quantity;
 
+    public void addOrder(Order order) {
+        this.order = order;
+        order.addOrderDetail(this);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
