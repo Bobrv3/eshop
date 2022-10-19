@@ -11,10 +11,10 @@ import java.time.LocalDateTime;
 
 @ControllerAdvice
 @RestController
-public class AdviceController {
-    @ExceptionHandler(RuntimeException.class)
+public class ExceptionHandlerController {
+    @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public CustomException process(RuntimeException e) {
+    public CustomException process(Exception e) {
         return CustomException.builder()
                 .message(e.getMessage())
                 .createdAt(LocalDateTime.now())

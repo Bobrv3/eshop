@@ -1,6 +1,7 @@
 package com.bobrov.eshop.mapper;
 
-import com.bobrov.eshop.dto.UserDto;
+import com.bobrov.eshop.dto.request.UserRequest;
+import com.bobrov.eshop.dto.response.UserResponse;
 import com.bobrov.eshop.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -15,8 +16,7 @@ public interface UserMapper {
     @Mapping(target = "locked", constant = "false")
     @Mapping(target = "enabled", constant = "true")
     @Mapping(target = "role", constant = "ROLE_USER")
-    User toUser(UserDto userDto, PasswordEncoder passwordEncoder);
+    User toSavingUser(UserRequest userDto, PasswordEncoder passwordEncoder);
 
-    @Mapping(target = "password", ignore = true)
-    UserDto toDto(User user);
+    UserResponse toResponse(User user);
 }

@@ -1,9 +1,9 @@
 package com.bobrov.eshop.service.impl;
 
 import com.bobrov.eshop.dao.UserRepository;
-import com.bobrov.eshop.dto.UserDto;
+import com.bobrov.eshop.dto.request.UserRequest;
+import com.bobrov.eshop.dto.response.UserResponse;
 import com.bobrov.eshop.mapper.UserMapper;
-import com.bobrov.eshop.model.User;
 import com.bobrov.eshop.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,8 +24,18 @@ public class UserImpl implements UserService {
     }
 
     @Override
-    public UserDto save(UserDto userDto) {
-        User user = repo.save(UserMapper.INSTANCE.toUser(userDto, passwordEncoder));
-        return UserMapper.INSTANCE.toDto(user);
+    public UserResponse save(UserRequest userRequest) {
+        try {
+            UserDetails existedUser = loadUserByUsername(userRequest.getUsername());
+            throw new RuntimeException("such user's already exists");
+        } catch (UsernameNotFoundException ex) {
+            if (!userRequest.getPassword().equals(userRequest.getRepeatPassword())) {
+                throw new RuntimeException("passwords don't match");
+            } else {
+                return UserMapper.INSTANCE.toResponse(
+                        repo.save(UserMapper.INSTANCE.toSavingUser(userRequest, passwordEncoder))
+                );
+            }
+        }
     }
 }
