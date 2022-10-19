@@ -17,6 +17,6 @@ public interface UserMapper {
     @Mapping(target = "role", constant = "ROLE_USER")
     User toUser(UserDto userDto, PasswordEncoder passwordEncoder);
 
-    @Mapping(target = "password", constant = "")
+    @Mapping(target = "password", ignore = true)
     UserDto toDto(User user);
 }

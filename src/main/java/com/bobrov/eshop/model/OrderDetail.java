@@ -1,5 +1,6 @@
 package com.bobrov.eshop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,6 +34,7 @@ public class OrderDetail {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "order_id")
     @ToString.Exclude
+    @JsonIgnore
     private Order order;
 
     @MapsId("productId")
