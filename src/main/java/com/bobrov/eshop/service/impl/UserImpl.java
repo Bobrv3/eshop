@@ -25,17 +25,8 @@ public class UserImpl implements UserService {
 
     @Override
     public UserResponse save(UserRequest userRequest) {
-        try {
-            UserDetails existedUser = loadUserByUsername(userRequest.getUsername());
-            throw new RuntimeException("such user's already exists");
-        } catch (UsernameNotFoundException ex) {
-            if (!userRequest.getPassword().equals(userRequest.getRepeatPassword())) {
-                throw new RuntimeException("passwords don't match");
-            } else {
-                return UserMapper.INSTANCE.toResponse(
-                        repo.save(UserMapper.INSTANCE.toSavingUser(userRequest, passwordEncoder))
-                );
-            }
-        }
+        return UserMapper.INSTANCE.toResponse(
+                repo.save(UserMapper.INSTANCE.toSavingUser(userRequest, passwordEncoder))
+        );
     }
 }
