@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
-public class SaveUserAdvice {
+public class BeforeSaveUser {
     @Autowired
     private UserRepository userRepository;
 

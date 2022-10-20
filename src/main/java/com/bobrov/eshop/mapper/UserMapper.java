@@ -8,6 +8,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.List;
+
 @Mapper
 public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
@@ -19,4 +21,6 @@ public interface UserMapper {
     User toSavingUser(UserRequest userDto, PasswordEncoder passwordEncoder);
 
     UserResponse toResponse(User user);
+
+    List<UserResponse> toListResponse(List<User> users);
 }

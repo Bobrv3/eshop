@@ -7,16 +7,21 @@ import com.bobrov.eshop.model.User;
 import com.bobrov.eshop.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/users")
+@RequestMapping("api/users")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
@@ -26,7 +31,15 @@ public class UserController {
         return UserMapper.INSTANCE.toResponse(
                 (User) userService.loadUserByUsername(username)
         );
+    }
 
+    @GetMapping
+    public List<UserResponse> getAll(
+            @RequestParam(required = false) Integer offset,
+            @RequestParam(required = false) Integer limit) {
+        return UserMapper.INSTANCE.toListResponse(
+                userService.findAll(offset, limit)
+        );
     }
 
     @PostMapping
@@ -35,11 +48,14 @@ public class UserController {
         return userService.save(userRequest);
     }
 
-//    @GetMapping("/profile")
-//    public String getUser(Model model, Principal principal) {
-//        User user = (User) userService.loadUserByUsername(principal.getName());
-//        model.addAttribute("user", UserMapper.INSTANCE.toDto(user));
-//
-//        return "profile";
-//    }
+    @PutMapping
+    public UserResponse update(@RequestBody UserRequest userRequest) {
+        return userService.update(userRequest);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        userService.delete(id);
+    }
+
 }
