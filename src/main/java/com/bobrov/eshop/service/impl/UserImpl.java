@@ -1,10 +1,9 @@
 package com.bobrov.eshop.service.impl;
 
-import com.bobrov.eshop.aop.BeforeSaveUser;
-import com.bobrov.eshop.aop.BeforeUpdateUser;
 import com.bobrov.eshop.dao.UserRepository;
 import com.bobrov.eshop.dto.request.UserRequest;
 import com.bobrov.eshop.dto.response.UserResponse;
+import com.bobrov.eshop.exception.NotFoundException;
 import com.bobrov.eshop.mapper.UserMapper;
 import com.bobrov.eshop.model.User;
 import com.bobrov.eshop.service.UserService;
@@ -17,51 +16,73 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserImpl implements UserService {
-    private final UserRepository repo;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return repo.findByUsername(username)
+        return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format("User %s not found", username)));
     }
 
     @Override
     public List<User> findAll(Integer offset, Integer limit) {
-
-
-        Page<User> users = repo.findAll(PageRequest.of(offset, limit));
-
+        Page<User> users = userRepository.findAll(PageRequest.of(offset, limit));
 
         return users.getContent();
     }
 
-    /**
-     * @see BeforeSaveUser
-     */
     @Override
     public UserResponse save(UserRequest userRequest) {
+        if (userRepository.existsByUsername(userRequest.getUsername())) {
+            throw new RuntimeException("User with such name's already exists");
+        } else if (!userRequest.getPassword().equals(userRequest.getRepeatPassword())) {
+            throw new RuntimeException("passwords don't match");
+        }
+
+        User user = UserMapper.INSTANCE.toUser(userRequest, passwordEncoder);
+        user.setLocked(false);
+        user.setEnabled(true);
+        user.setRole(User.Role.ROLE_USER);
+
         return UserMapper.INSTANCE.toResponse(
-                repo.save(UserMapper.INSTANCE.toSavingUser(userRequest, passwordEncoder))
+                userRepository.save(user)
         );
     }
 
-    /**
-     * @see BeforeUpdateUser
-     */
     @Override
     public UserResponse update(UserRequest userRequest) {
+        User updatedUser = userRepository.findById(userRequest.getId())
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        Optional<User> existedUser = userRepository.findByUsername(userRequest.getUsername());
+
+        if (!existedUser.isPresent() || Objects.equals(updatedUser.getId(), existedUser.get().getId())) {
+            checkPasswords(userRequest);
+        } else {
+            throw new RuntimeException(String.format("user with name '%s' has already exists", userRequest.getUsername()));
+        }
+
+        UserMapper.INSTANCE.updateModel(userRequest, updatedUser, passwordEncoder);
+
         return UserMapper.INSTANCE.toResponse(
-                repo.save(UserMapper.INSTANCE.toSavingUser(userRequest, passwordEncoder))
+                userRepository.save(updatedUser)
         );
     }
 
     @Override
     public void delete(Long id) {
-        repo.deleteById(id);
+        userRepository.deleteById(id);
+    }
+
+    private void checkPasswords(UserRequest userRequest) {
+        if (!userRequest.getPassword().equals(userRequest.getRepeatPassword())) {
+            throw new RuntimeException("passwords don't match");
+        }
     }
 }

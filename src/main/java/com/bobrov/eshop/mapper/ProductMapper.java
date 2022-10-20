@@ -3,7 +3,7 @@ package com.bobrov.eshop.mapper;
 import com.bobrov.eshop.dto.ProductDto;
 import com.bobrov.eshop.model.Product;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
 import java.time.LocalDateTime;
@@ -13,8 +13,6 @@ import java.util.List;
 public interface ProductMapper {
     ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
 
-    @Mapping(target = "status", expression = "java(Product.ProductStatus.IN_STOCK)")
-    @Mapping(target = "createdAt", expression = "java(LocalDateTime.now())")
     Product toProduct(ProductDto productDto);
 
     ProductDto toDto(Product product);
@@ -23,4 +21,5 @@ public interface ProductMapper {
 
     List<ProductDto> toDtoList(List<Product> products);
 
+    void updateModel(ProductDto productDto, @MappingTarget Product product);
 }

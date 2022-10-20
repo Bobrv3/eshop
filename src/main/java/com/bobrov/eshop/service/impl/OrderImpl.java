@@ -12,6 +12,8 @@ import com.bobrov.eshop.model.Product;
 import com.bobrov.eshop.model.User;
 import com.bobrov.eshop.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -33,9 +35,9 @@ public class OrderImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDto> findAll() {
-        List<Order> orders = orderRepository.findAll();
-        return OrderMapper.INSTANCE.toListDto(orders);
+    public List<Order> findAll(Integer offset, Integer limit) {
+        Page<Order> orders = orderRepository.findAll(PageRequest.of(offset, limit));
+        return orders.getContent();
     }
 
     @Override

@@ -1,13 +1,14 @@
 package com.bobrov.eshop.service;
 
 import com.bobrov.eshop.dto.OrderDto;
+import com.bobrov.eshop.model.Order;
 
 import java.util.List;
 
 public interface OrderService {
     OrderDto findById(Long id);
 
-    List<OrderDto> findAll();
+    List<Order> findAll(Integer offset, Integer limit);
 
     OrderDto save(OrderDto order);
 }

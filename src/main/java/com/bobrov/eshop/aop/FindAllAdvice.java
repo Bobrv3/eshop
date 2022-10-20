@@ -11,7 +11,9 @@ import java.util.List;
 
 @Aspect
 @Component
-public class AroundFindAllAdvice {
+public class FindAllAdvice {
+    private static final int OFFSET = 0;
+    private static final int LIMIT = 5;
 
     @Around("execution(* com.bobrov.eshop.service.impl.*.findAll(..))")
     public Object checkPossibilityToSaveUser(ProceedingJoinPoint joinPoint) throws Throwable {
@@ -19,10 +21,10 @@ public class AroundFindAllAdvice {
         Integer limit = (Integer) joinPoint.getArgs()[1];
 
         if (offset == null) {
-            joinPoint.getArgs()[0] = 0;
+            joinPoint.getArgs()[0] = OFFSET;
         }
         if (limit == null) {
-            joinPoint.getArgs()[1] = 5;
+            joinPoint.getArgs()[1] = LIMIT;
         }
 
         List<User> result = (List<User>) joinPoint.proceed(joinPoint.getArgs());
