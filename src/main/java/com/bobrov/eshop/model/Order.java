@@ -22,6 +22,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -53,15 +54,24 @@ public class Order {
     @OneToMany(cascade = CascadeType.ALL
             , mappedBy = "order")
     @ToString.Exclude
-    private List<OrderDetail> orderDetails;
+    private List<OrderDetail> orderDetails = new ArrayList<>();
 
     public void addOrderDetail(OrderDetail detail) {
-        if (orderDetails == null) {
-            orderDetails = new ArrayList<>();
+        if (detail == null) {
+            throw new NullPointerException("Can't add null orderDetail");
+        } else if (detail.getOrder() != null) {
+            throw new IllegalStateException("orderDetail is already assigned to an Order");
         }
-        
         orderDetails.add(detail);
         detail.setOrder(this);
+    }
+
+    public List<OrderDetail> getOrderDetails() {
+        return Collections.unmodifiableList(orderDetails);
+    }
+
+    private void setOrderDetails(List<OrderDetail> orderDetails) {
+        this.orderDetails = orderDetails;
     }
 
     @Override

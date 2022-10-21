@@ -45,9 +45,8 @@ public class OrderDetail {
 
     private int quantity;
 
-    public void addOrder(Order order) {
+    void setOrder(Order order) {
         this.order = order;
-        order.addOrderDetail(this);
     }
 
     @Override
