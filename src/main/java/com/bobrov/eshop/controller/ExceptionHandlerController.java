@@ -17,6 +17,7 @@ public class ExceptionHandlerController {
     public CustomException process(Exception e) {
         return CustomException.builder()
                 .message(e.getMessage())
+                .type(e.getClass().getSimpleName())
                 .createdAt(LocalDateTime.now())
                 .build();
     }

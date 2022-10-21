@@ -2,6 +2,7 @@ package com.bobrov.eshop.service.impl;
 
 import com.bobrov.eshop.dao.ProductRepository;
 import com.bobrov.eshop.dto.ProductDto;
+import com.bobrov.eshop.exception.ProductNotFoundException;
 import com.bobrov.eshop.mapper.ProductMapper;
 import com.bobrov.eshop.model.Product;
 import com.bobrov.eshop.service.ProductService;
@@ -20,7 +21,7 @@ public class ProductImpl implements ProductService {
     @Override
     public ProductDto findById(Long id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(ProductNotFoundException::new);
 
         return ProductMapper.INSTANCE.toDto(product);
     }
@@ -43,7 +44,8 @@ public class ProductImpl implements ProductService {
 
     @Override
     public ProductDto update(ProductDto productDto) {
-        Product product = productRepository.findById(productDto.getId()).get();
+        Product product = productRepository.findById(productDto.getId())
+                .orElseThrow(ProductNotFoundException::new);
 
         ProductMapper.INSTANCE.updateModel(productDto, product);
 

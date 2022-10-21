@@ -3,7 +3,7 @@ package com.bobrov.eshop.service.impl;
 import com.bobrov.eshop.dao.UserRepository;
 import com.bobrov.eshop.dto.request.UserRequest;
 import com.bobrov.eshop.dto.response.UserResponse;
-import com.bobrov.eshop.exception.NotFoundException;
+import com.bobrov.eshop.exception.UserNotFoundException;
 import com.bobrov.eshop.mapper.UserMapper;
 import com.bobrov.eshop.model.User;
 import com.bobrov.eshop.service.UserService;
@@ -28,7 +28,7 @@ public class UserImpl implements UserService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(String.format("User %s not found", username)));
+                .orElseThrow(UserNotFoundException::new);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class UserImpl implements UserService {
     @Override
     public UserResponse update(UserRequest userRequest) {
         User updatedUser = userRepository.findById(userRequest.getId())
-                .orElseThrow(() -> new NotFoundException("User not found"));
+                .orElseThrow(UserNotFoundException::new);
         Optional<User> existedUser = userRepository.findByUsername(userRequest.getUsername());
 
         if (!existedUser.isPresent() || Objects.equals(updatedUser.getId(), existedUser.get().getId())) {

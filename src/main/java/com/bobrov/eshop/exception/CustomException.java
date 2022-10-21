@@ -9,5 +9,6 @@ import java.time.LocalDateTime;
 @Builder
 public class CustomException {
     private String message;
+    private String type;
     private LocalDateTime createdAt;
 }
