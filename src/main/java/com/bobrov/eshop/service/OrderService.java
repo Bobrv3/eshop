@@ -11,4 +11,8 @@ public interface OrderService {
     List<Order> findAll(Integer offset, Integer limit);
 
     OrderDto save(OrderDto order);
+
+    OrderDto update(OrderDto orderDto);
+
+    void delete(Long id);
 }

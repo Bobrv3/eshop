@@ -1,5 +1,6 @@
 package com.bobrov.eshop.dto;
 
+import com.bobrov.eshop.model.Product;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -14,4 +15,5 @@ public class ProductDto implements Serializable {
     private Long id;
     private String name;
     private BigDecimal price;
+    private Product.ProductStatus status;
 }
