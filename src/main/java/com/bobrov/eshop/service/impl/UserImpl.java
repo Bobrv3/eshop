@@ -77,7 +77,11 @@ public class UserImpl implements UserService {
 
     @Override
     public void delete(Long id) {
-        userRepository.deleteById(id);
+        if (userRepository.existsById(id)) {
+            userRepository.deleteById(id);
+        } else {
+            throw new UserNotFoundException(String.format("No user with id %s exists", id));
+        }
     }
 
     private void checkPasswords(UserRequest userRequest) {

@@ -110,8 +110,10 @@ public class OrderImpl implements OrderService {
 
     @Override
     public void delete(Long id) {
-        orderRepository.deleteById(id);
+        if (orderRepository.existsById(id)) {
+            orderRepository.deleteById(id);
+        } else {
+            throw new UserNotFoundException(String.format("No order with id %s exists", id));
+        }
     }
-
-
 }
