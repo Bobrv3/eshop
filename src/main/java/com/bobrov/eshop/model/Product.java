@@ -2,7 +2,11 @@ package com.bobrov.eshop.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Column;
@@ -15,12 +19,16 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
-@Data
-@Entity
-@Table(name = "products")
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Entity
+@Table(name = "products")
 public class Product {
     public enum ProductStatus {
         IN_STOCK, OUT_OF_STOCK, RUNNING_LOW
@@ -37,7 +45,20 @@ public class Product {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    public Product() {
-        status = ProductStatus.IN_STOCK;
+    private void setId(Long id) {
+        this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Product product = (Product) o;
+        return id != null && Objects.equals(id, product.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

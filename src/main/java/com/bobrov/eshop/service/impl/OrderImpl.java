@@ -1,10 +1,16 @@
 package com.bobrov.eshop.service.impl;
 
+import com.bobrov.eshop.dao.OrderDetailRepository;
 import com.bobrov.eshop.dao.OrderRepository;
 import com.bobrov.eshop.dao.ProductRepository;
 import com.bobrov.eshop.dao.UserRepository;
 import com.bobrov.eshop.dto.OrderDto;
 import com.bobrov.eshop.exception.NotFoundException;
+import com.bobrov.eshop.exception.OrderNotFoundException;
+import com.bobrov.eshop.exception.OutOfStockException;
+import com.bobrov.eshop.exception.ProductNotFoundException;
+import com.bobrov.eshop.exception.UserNotFoundException;
+import com.bobrov.eshop.mapper.OrderDetailMapper;
 import com.bobrov.eshop.mapper.OrderMapper;
 import com.bobrov.eshop.model.Order;
 import com.bobrov.eshop.model.OrderDetail;
@@ -18,12 +24,12 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class OrderImpl implements OrderService {
     private final OrderRepository orderRepository;
+    private final OrderDetailRepository detailRepository;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
 
@@ -41,28 +47,71 @@ public class OrderImpl implements OrderService {
     }
 
     @Override
-    public OrderDto save(OrderDto order) {
+    public OrderDto save(OrderDto orderDto) {
         Order newOrder = new Order();
-        newOrder.setCreatedAt(LocalDateTime.now());
-        newOrder.setStatus(Order.OrderStatus.IN_PROCESSING);
-        User user = userRepository.findByUsername(order.getUser().getUsername())
-                .orElseThrow(NotFoundException::new);
+        if (newOrder.getCreatedAt() == null) {
+            newOrder.setCreatedAt(LocalDateTime.now());
+        }
+        if (newOrder.getStatus() == null) {
+            newOrder.setStatus(Order.OrderStatus.IN_PROCESSING);
+        }
+
+        User user = userRepository.findByUsername(orderDto.getUser().getUsername())
+                .orElseThrow(UserNotFoundException::new);
         newOrder.setUser(user);
-        newOrder.setOrderDetails(order.getOrderDetails()
-                .stream()
-                .map(orderDetail -> {
+
+        orderDto.getOrderDetails().stream()
+                .forEach(orderDetail -> {
                     Product product = productRepository.findById(orderDetail.getProduct().getId())
-                            .orElseThrow(NotFoundException::new);
+                            .orElseThrow(ProductNotFoundException::new);
+
+                    if (product.getStatus() == Product.ProductStatus.OUT_OF_STOCK) {
+                        throw new OutOfStockException(String.format("%s is out of stock", product.getName()));
+                    }
+
                     OrderDetail newOrderDetail = new OrderDetail();
                     newOrderDetail.setProduct(product);
-                    newOrderDetail.setOrder(newOrder);
                     newOrderDetail.setQuantity(orderDetail.getQuantity());
-                    return newOrderDetail;
-                })
-                .collect(Collectors.toList()));
 
-        Order savedOrder = orderRepository.save(newOrder);
+                    newOrder.addOrderDetail(newOrderDetail);
+                });
 
-        return OrderMapper.INSTANCE.toDto(savedOrder);
+        return OrderMapper.INSTANCE.toDto(
+                orderRepository.save(newOrder)
+        );
     }
+
+    @Override
+    public OrderDto update(OrderDto orderDto) {
+        Order order = orderRepository.findById(orderDto.getId())
+                .orElseThrow(OrderNotFoundException::new);
+
+        order.removeAll();
+        orderRepository.save(order);
+
+        orderDto.getOrderDetails().stream()
+                .forEach(orderDetail -> {
+                    Product product = productRepository.findById(orderDetail.getId().getProductId())
+                            .orElseThrow(ProductNotFoundException::new);
+                    if (product.getStatus() == Product.ProductStatus.OUT_OF_STOCK) {
+                        throw new OutOfStockException(String.format("%s is out of stock", product.getName()));
+                    }
+
+                    OrderDetail newOrderDetail = OrderDetailMapper.INSTANCE.toDetail(orderDetail);
+                    order.addOrderDetail(newOrderDetail);
+                    newOrderDetail.setProduct(product);
+                    newOrderDetail.setQuantity(orderDetail.getQuantity());
+                });
+
+        return OrderMapper.INSTANCE.toDto(
+                orderRepository.save(order)
+        );
+    }
+
+    @Override
+    public void delete(Long id) {
+        orderRepository.deleteById(id);
+    }
+
+
 }

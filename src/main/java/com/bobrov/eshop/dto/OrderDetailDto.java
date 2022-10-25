@@ -1,5 +1,6 @@
 package com.bobrov.eshop.dto;
 
+import com.bobrov.eshop.model.OrderDetailId;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -9,7 +10,7 @@ import java.io.Serializable;
  */
 @Data
 public class OrderDetailDto implements Serializable {
-
-    final ProductDto product;
+    private final OrderDetailId id;
+    private final ProductDto product;
     private final int quantity;
 }

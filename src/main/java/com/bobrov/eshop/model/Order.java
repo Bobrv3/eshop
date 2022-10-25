@@ -59,19 +59,29 @@ public class Order {
     public void addOrderDetail(OrderDetail detail) {
         if (detail == null) {
             throw new NullPointerException("Can't add null orderDetail");
-        } else if (detail.getOrder() != null) {
-            throw new IllegalStateException("orderDetail is already assigned to an Order");
         }
+
         orderDetails.add(detail);
         detail.setOrder(this);
+    }
+
+    public void removeAll() {
+        for (OrderDetail detail : orderDetails) {
+            detail.removeOrder();
+        }
+        orderDetails.clear();
+    }
+
+    private void setOrderDetails(List<OrderDetail> orderDetails) {
+        this.orderDetails = orderDetails;
     }
 
     public List<OrderDetail> getOrderDetails() {
         return Collections.unmodifiableList(orderDetails);
     }
 
-    private void setOrderDetails(List<OrderDetail> orderDetails) {
-        this.orderDetails = orderDetails;
+    private void setId(Long id) {
+        this.id = id;
     }
 
     @Override

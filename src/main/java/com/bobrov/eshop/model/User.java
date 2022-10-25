@@ -2,7 +2,11 @@ package com.bobrov.eshop.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.Hibernate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,12 +21,16 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Objects;
 
-@Data
-@Entity
-@Table(name = "users")
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Entity
+@Table(name = "users")
 public class User implements UserDetails {
     public enum Role {
         ROLE_ADMIN, ROLE_USER
@@ -40,12 +48,6 @@ public class User implements UserDetails {
     private Role role;
     private boolean locked;
     private boolean enabled;
-
-    public User() {
-        role = Role.ROLE_USER;
-        locked = false;
-        enabled = true;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -70,5 +72,22 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return enabled;
+    }
+
+    private void setId(Long id) {
+        this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        User user = (User) o;
+        return id != null && Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

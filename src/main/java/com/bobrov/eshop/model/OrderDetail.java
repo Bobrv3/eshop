@@ -31,7 +31,7 @@ public class OrderDetail {
     private OrderDetailId id = new OrderDetailId();
 
     @MapsId("orderId")
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @ManyToOne
     @JoinColumn(name = "order_id")
     @ToString.Exclude
     @JsonIgnore
@@ -47,6 +47,10 @@ public class OrderDetail {
 
     void setOrder(Order order) {
         this.order = order;
+    }
+
+    void removeOrder() {
+        order = null;
     }
 
     @Override
