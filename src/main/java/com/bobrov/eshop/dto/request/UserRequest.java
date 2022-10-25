@@ -21,4 +21,5 @@ public class UserRequest implements Serializable {
     private String repeatPassword;
     private String phone;
     private String email;
+    private User.Role role;
 }

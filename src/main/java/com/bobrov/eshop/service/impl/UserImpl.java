@@ -47,9 +47,6 @@ public class UserImpl implements UserService {
         }
 
         User user = UserMapper.INSTANCE.toUser(userRequest, passwordEncoder);
-        user.setLocked(false);
-        user.setEnabled(true);
-        user.setRole(User.Role.ROLE_USER);
 
         return UserMapper.INSTANCE.toResponse(
                 userRepository.save(user)

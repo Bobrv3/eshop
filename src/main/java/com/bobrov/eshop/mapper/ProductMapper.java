@@ -3,6 +3,7 @@ package com.bobrov.eshop.mapper;
 import com.bobrov.eshop.dto.ProductDto;
 import com.bobrov.eshop.model.Product;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
@@ -13,6 +14,7 @@ import java.util.List;
 public interface ProductMapper {
     ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
 
+    @Mapping(target = "status", defaultExpression = "java(Product.ProductStatus.IN_STOCK)")
     Product toProduct(ProductDto productDto);
 
     ProductDto toDto(Product product);

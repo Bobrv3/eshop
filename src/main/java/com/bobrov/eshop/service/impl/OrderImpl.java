@@ -22,7 +22,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -49,9 +48,7 @@ public class OrderImpl implements OrderService {
     @Override
     public OrderDto save(OrderDto orderDto) {
         Order newOrder = new Order();
-        if (newOrder.getCreatedAt() == null) {
-            newOrder.setCreatedAt(LocalDateTime.now());
-        }
+
         if (newOrder.getStatus() == null) {
             newOrder.setStatus(Order.OrderStatus.IN_PROCESSING);
         }

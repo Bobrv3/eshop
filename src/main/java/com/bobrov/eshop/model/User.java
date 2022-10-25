@@ -1,5 +1,6 @@
 package com.bobrov.eshop.model;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -38,16 +40,29 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter(AccessLevel.NONE)
     private Long id;
-    @Column(unique = true)
+
+    @Column(nullable = false, unique = true)
     private String username;
+
+    @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
     private String phone;
+
+    @Column(nullable = false)
     private String email;
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Role role;
-    private boolean locked;
-    private boolean enabled;
+    @Column(nullable = false, insertable = false)
+    @ColumnDefault("false")
+    private Boolean locked;
+    @Column(nullable = false, insertable = false)
+    @ColumnDefault("true")
+    private Boolean enabled;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -72,10 +87,6 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return enabled;
-    }
-
-    private void setId(Long id) {
-        this.id = id;
     }
 
     @Override

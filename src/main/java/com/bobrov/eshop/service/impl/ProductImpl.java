@@ -35,7 +35,6 @@ public class ProductImpl implements ProductService {
     @Override
     public ProductDto save(ProductDto productDto) {
         Product product = ProductMapper.INSTANCE.toProduct(productDto);
-        product.setStatus(Product.ProductStatus.IN_STOCK);
 
         return ProductMapper.INSTANCE.toDto(
                 productRepository.save(product)

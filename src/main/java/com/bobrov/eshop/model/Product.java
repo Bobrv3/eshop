@@ -1,5 +1,6 @@
 package com.bobrov.eshop.model;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,18 +37,24 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
+    @Setter(AccessLevel.NONE)
     private Long id;
-    private String name;
-    private BigDecimal price;
-    @Enumerated(EnumType.STRING)
-    private ProductStatus status;
-    @CreationTimestamp
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
 
-    private void setId(Long id) {
-        this.id = id;
-    }
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
+    private BigDecimal price;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ProductStatus status;
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    @Setter(AccessLevel.NONE)
+    private LocalDateTime createdAt;
 
     @Override
     public boolean equals(Object o) {

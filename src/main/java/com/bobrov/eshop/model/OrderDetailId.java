@@ -3,6 +3,7 @@ package com.bobrov.eshop.model;
 import lombok.Getter;
 import org.hibernate.Hibernate;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
@@ -10,7 +11,10 @@ import java.util.Objects;
 @Embeddable
 @Getter
 public class OrderDetailId implements Serializable {
+    @Column(nullable = false)
     private Long orderId;
+
+    @Column(nullable = false)
     private Long productId;
 
     @Override

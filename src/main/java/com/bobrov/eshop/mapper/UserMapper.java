@@ -16,6 +16,7 @@ public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
     @Mapping(target = "password", expression = "java(passwordEncoder.encode(userDto.getPassword()))")
+    @Mapping(target = "role", defaultExpression = "java(User.Role.ROLE_USER)")
     User toUser(UserRequest userDto, PasswordEncoder passwordEncoder);
 
     UserResponse toResponse(User user);

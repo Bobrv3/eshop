@@ -1,7 +1,6 @@
 package com.bobrov.eshop.aop;
 
 import com.bobrov.eshop.exception.NotFoundException;
-import com.bobrov.eshop.model.User;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -27,7 +26,7 @@ public class FindAllAdvice {
             joinPoint.getArgs()[1] = LIMIT;
         }
 
-        List<User> result = (List<User>) joinPoint.proceed(joinPoint.getArgs());
+        List<Object> result = (List<Object>) joinPoint.proceed(joinPoint.getArgs());
 
         if (result.isEmpty()) {
             throw new NotFoundException("The page index must not be greater than last page");

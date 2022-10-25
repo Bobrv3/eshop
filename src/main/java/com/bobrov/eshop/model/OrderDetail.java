@@ -9,7 +9,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
 
-import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -31,19 +31,18 @@ public class OrderDetail {
     private OrderDetailId id = new OrderDetailId();
 
     @MapsId("orderId")
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    @ToString.Exclude
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "order_id", nullable = false)
     @JsonIgnore
     private Order order;
 
     @MapsId("productId")
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-    @JoinColumn(name = "product_id")
-    @ToString.Exclude
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    private int quantity;
+    @Column(nullable = false)
+    private Integer quantity;
 
     void setOrder(Order order) {
         this.order = order;
