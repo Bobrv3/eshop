@@ -6,7 +6,6 @@ import com.bobrov.eshop.dao.ProductRepository;
 import com.bobrov.eshop.dao.UserRepository;
 import com.bobrov.eshop.dto.OrderDto;
 import com.bobrov.eshop.exception.NotFoundException;
-import com.bobrov.eshop.exception.OrderNotFoundException;
 import com.bobrov.eshop.exception.OutOfStockException;
 import com.bobrov.eshop.exception.ProductNotFoundException;
 import com.bobrov.eshop.exception.UserNotFoundException;
@@ -23,6 +22,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -48,10 +48,7 @@ public class OrderImpl implements OrderService {
     @Override
     public OrderDto save(OrderDto orderDto) {
         Order newOrder = new Order();
-
-        if (newOrder.getStatus() == null) {
-            newOrder.setStatus(Order.OrderStatus.IN_PROCESSING);
-        }
+        newOrder.setStatus(Order.OrderStatus.IN_PROCESSING);
 
         User user = userRepository.findByUsername(orderDto.getUser().getUsername())
                 .orElseThrow(UserNotFoundException::new);
@@ -80,11 +77,18 @@ public class OrderImpl implements OrderService {
 
     @Override
     public OrderDto update(OrderDto orderDto) {
-        Order order = orderRepository.findById(orderDto.getId())
-                .orElseThrow(OrderNotFoundException::new);
+        Optional<Order> orderOptional = orderRepository.findById(orderDto.getId());
+        if (!orderOptional.isPresent()) {
+            return save(orderDto);
+        }
 
-        order.removeAll();
-        orderRepository.save(order);
+        Order order = orderOptional.get();
+
+        order.removeAllDetails();
+
+        User user = userRepository.findByUsername(orderDto.getUser().getUsername())
+                .orElseThrow(UserNotFoundException::new);
+        order.setUser(user);
 
         orderDto.getOrderDetails().stream()
                 .forEach(orderDetail -> {

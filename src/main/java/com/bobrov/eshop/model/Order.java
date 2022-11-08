@@ -15,6 +15,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -55,11 +56,12 @@ public class Order {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @OneToMany(cascade = CascadeType.ALL
+            , orphanRemoval = true
             , mappedBy = "order")
     @ToString.Exclude
     @Setter(AccessLevel.NONE)
@@ -74,10 +76,7 @@ public class Order {
         detail.setOrder(this);
     }
 
-    public void removeAll() {
-        for (OrderDetail detail : orderDetails) {
-            detail.removeOrder();
-        }
+    public void removeAllDetails() {
         orderDetails.clear();
     }
 
