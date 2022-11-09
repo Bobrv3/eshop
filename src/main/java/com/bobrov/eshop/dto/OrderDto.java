@@ -6,7 +6,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
 /**
  * A DTO for the {@link Order} entity
@@ -17,5 +17,5 @@ public class OrderDto implements Serializable {
     private final Order.OrderStatus status;
     private final LocalDateTime createdAt;
     private final UserResponse user;
-    private final List<OrderDetailDto> orderDetails;
+    private final Set<OrderDetailDto> orderDetails;
 }

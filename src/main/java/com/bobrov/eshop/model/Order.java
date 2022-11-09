@@ -24,10 +24,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "orders")
@@ -65,7 +64,7 @@ public class Order {
             , mappedBy = "order")
     @ToString.Exclude
     @Setter(AccessLevel.NONE)
-    private List<OrderDetail> orderDetails = new ArrayList<>();
+    private Set<OrderDetail> orderDetails = new HashSet<>();
 
     public void addOrderDetail(OrderDetail detail) {
         if (detail == null) {
@@ -80,8 +79,8 @@ public class Order {
         orderDetails.clear();
     }
 
-    public List<OrderDetail> getOrderDetails() {
-        return Collections.unmodifiableList(orderDetails);
+    public Set<OrderDetail> getOrderDetails() {
+        return orderDetails;
     }
 
     @Override
