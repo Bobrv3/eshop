@@ -90,6 +90,10 @@ public class OrderImpl implements OrderService {
                 .orElseThrow(UserNotFoundException::new);
         order.setUser(user);
 
+        if (orderDto.getStatus() != null) {
+            order.setStatus(orderDto.getStatus());
+        }
+
         orderDto.getOrderDetails().stream()
                 .forEach(orderDetail -> {
                     Product product = productRepository.findById(orderDetail.getId().getProductId())
