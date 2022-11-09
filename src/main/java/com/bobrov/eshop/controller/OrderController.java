@@ -40,6 +40,17 @@ public class OrderController {
         );
     }
 
+    @GetMapping("/created-at-between")
+    @ResponseStatus(HttpStatus.OK)
+    public List<OrderDto> getAll(
+            @RequestParam("start") String createdAtStart,
+            @RequestParam("end") String createdAtEnd
+    ) {
+        return OrderMapper.INSTANCE.toListDto(
+                orderService.findByCreatedAtBetweenOrderByIdAscCreatedAtAsc(createdAtStart, createdAtEnd)
+        );
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public OrderDto save(@RequestBody OrderDto orderDto) {

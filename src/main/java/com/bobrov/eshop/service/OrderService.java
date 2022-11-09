@@ -10,6 +10,8 @@ public interface OrderService {
 
     List<Order> findAll(Integer offset, Integer limit);
 
+    List<Order> findByCreatedAtBetweenOrderByIdAscCreatedAtAsc(String createdAtStart, String createdAtEnd);
+
     OrderDto save(OrderDto order);
 
     OrderDto update(OrderDto orderDto);

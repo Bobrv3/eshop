@@ -21,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,6 +44,11 @@ public class OrderImpl implements OrderService {
     public List<Order> findAll(Integer offset, Integer limit) {
         Page<Order> orders = orderRepository.findAll(PageRequest.of(offset, limit));
         return orders.getContent();
+    }
+
+    @Override
+    public List<Order> findByCreatedAtBetweenOrderByIdAscCreatedAtAsc(String createdAtStart, String createdAtEnd) {
+        return orderRepository.findByCreatedAtBetweenOrderByIdAscCreatedAtAsc(LocalDateTime.parse(createdAtStart), LocalDateTime.parse(createdAtEnd));
     }
 
     @Override
