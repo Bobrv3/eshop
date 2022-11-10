@@ -33,7 +33,7 @@ public class SecurityConfig {
     @Profile("dev")
     public PersistentTokenRepository tokenRepository() {
         JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
-        jdbcTokenRepository.setCreateTableOnStartup(true);
+        jdbcTokenRepository.setCreateTableOnStartup(false);
         jdbcTokenRepository.setDataSource(dataSource);
         return jdbcTokenRepository;
     }

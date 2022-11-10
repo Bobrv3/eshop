@@ -46,7 +46,7 @@ public class Order {
     @Setter(AccessLevel.NONE)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private OrderStatus status;
 

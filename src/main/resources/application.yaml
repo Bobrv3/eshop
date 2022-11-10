@@ -5,7 +5,7 @@ spring:
         - dev
   jpa:
     hibernate:
-      ddl-auto: 'create-drop'
+      ddl-auto: validate
     show-sql: true
 
   datasource:
@@ -18,7 +18,8 @@ spring:
   thymeleaf:
     cache: false
   flyway:
-    enabled: false
+    locations:
+      - "classpath:db/dev_migration"
 
 rememberMeKey: ${REMEMBER_ME_KEY}
 
