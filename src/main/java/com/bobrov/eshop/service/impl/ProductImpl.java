@@ -7,7 +7,6 @@ import com.bobrov.eshop.mapper.ProductMapper;
 import com.bobrov.eshop.model.Product;
 import com.bobrov.eshop.service.ProductService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +19,7 @@ public class ProductImpl implements ProductService {
 
     @Override
     public ProductDto findById(Long id) {
-        Product product = productRepository.findById(id)
+        Product product = productRepository.findByIdAndStatusNot(id, Product.ProductStatus.REMOVED)
                 .orElseThrow(ProductNotFoundException::new);
 
         return ProductMapper.INSTANCE.toDto(product);
@@ -28,8 +27,7 @@ public class ProductImpl implements ProductService {
 
     @Override
     public List<Product> findAll(Integer offset, Integer limit) {
-        Page<Product> products = productRepository.findAll(PageRequest.of(offset, limit));
-        return products.getContent();
+        return productRepository.findByStatusNot(Product.ProductStatus.REMOVED, PageRequest.of(offset, limit));
     }
 
     @Override
@@ -57,7 +55,7 @@ public class ProductImpl implements ProductService {
     @Override
     public void delete(Long id) {
         if (productRepository.existsById(id)) {
-            productRepository.deleteById(id);
+            productRepository.updateStatusById(Product.ProductStatus.REMOVED, id);
         } else {
             throw new ProductNotFoundException(String.format("No product with id %s exists", id));
         }

@@ -32,7 +32,7 @@ import java.util.Objects;
 @Table(name = "products")
 public class Product {
     public enum ProductStatus {
-        IN_STOCK, OUT_OF_STOCK, RUNNING_LOW
+        IN_STOCK, OUT_OF_STOCK, RUNNING_LOW, REMOVED
     }
 
     @Id
