@@ -28,7 +28,7 @@ CREATE TABLE orders (
 CREATE TABLE products (
   id BIGINT AUTO_INCREMENT NOT NULL,
    name VARCHAR(255) NOT NULL,
-   price DECIMAL NOT NULL,
+   price DECIMAL(4, 2) NOT NULL,
    status VARCHAR(255) NOT NULL,
    created_at datetime NOT NULL,
    CONSTRAINT pk_products PRIMARY KEY (id)
