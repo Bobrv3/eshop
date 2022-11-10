@@ -9,12 +9,9 @@ spring:
     show-sql: true
 
   datasource:
-    generate-unique-name: false
-    username: sa
-    password:
-  h2:
-    console:
-      enabled: true
+    url: jdbc:mysql://localhost/eshop?serverTimezone=UTC
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   thymeleaf:
     cache: false
   flyway:
