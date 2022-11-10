@@ -54,10 +54,14 @@ public class ProductImpl implements ProductService {
 
     @Override
     public void delete(Long id) {
-        if (productRepository.existsById(id)) {
+        ProductDto product = findById(id);
+
+        if (product.getStatus() != Product.ProductStatus.IN_STOCK
+                && product.getStatus() != Product.ProductStatus.RUNNING_LOW
+        ) {
             productRepository.updateStatusById(Product.ProductStatus.REMOVED, id);
         } else {
-            throw new ProductNotFoundException(String.format("No product with id %s exists", id));
+            throw new RuntimeException("Can't delete a product in the IN_STOCK and RUNNING_LOW");
         }
     }
 }
